@@ -112,7 +112,7 @@ df_train.loc[df_train.Age.isna(),'Age'] = df_train.new_title.map(lambda x: auxAg
     
 # df_train = df_train.dropna()
 
-OneHotEncode = OneHotEncoder(sparse_output=False)
+OneHotEncode = OneHotEncoder(sparse=False)
 col_num = list(set(df_train.columns[df_train.dtypes != 'object']) - set(['PassengerId']))
 col_num = [i for i in col_num if i != target_col]
 ordEncode_col = ['Embarked']
@@ -145,9 +145,9 @@ print(scores_all)
 print(cross_val_score(RandomForestClassifier(n_estimators = 100, min_samples_leaf=2, random_state=0),
                         X_train,y_train,cv=10,scoring='roc_auc').mean())
 
-model = RandomForestClassifier(n_estimators = 100, min_samples_leaf=2, random_state=0)
+model = RandomForestClassifier(n_estimators = 100, min_samples_leaf=2, random_state=0, max_features='sqrt')
 model.fit(X_train,y_train)
-sns.barplot(x = model.feature_importances_, y = model.feature_names_in_)
+sns.barplot(x = model.feature_importances_, y = X_train.columns)
 
 GridSearchRF=GridSearchCV(estimator=RandomForestClassifier(random_state=0), 
                           param_grid={'n_estimators':[50,100,200],
